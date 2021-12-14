@@ -539,6 +539,14 @@ AC_ARG_ENABLE(bpf,
    esac]
 )
 
+AC_ARG_ENABLE(builtin-plugins,
+  AS_HELP_STRING([--enable-builtin-plugins], [enable builtin libv4l plugins]),
+  [case "${enableval}" in
+     yes | no ) ;;
+     *) AC_MSG_ERROR(bad value ${enableval} for --enable-builtin-plugins) ;;
+   esac]
+)
+
 PKG_CHECK_MODULES([SDL2], [sdl2 SDL2_image], [sdl_pc=yes], [sdl_pc=no])
 AM_CONDITIONAL([HAVE_SDL], [test x$sdl_pc = xyes])
 
@@ -555,6 +563,7 @@ AM_CONDITIONAL([WITH_V4LUTILS],	    [test x$enable_v4l_utils != xno -a x$linux_o
 AM_CONDITIONAL([WITH_QV4L2],	    [test x${qt_pkgconfig} = xtrue -a x$enable_qv4l2 != xno])
 AM_CONDITIONAL([WITH_QVIDCAP],	    [test x${qt_desktop_opengl} = xyes -a x$enable_qvidcap != xno])
 AM_CONDITIONAL([WITH_V4L_PLUGINS],  [test x$enable_dyn_libv4l != xno -a x$enable_shared != xno])
+AM_CONDITIONAL([WITH_V4L_BUILTIN_PLUGINS], [test x$enable_builtin_plugins = xyes])
 AM_CONDITIONAL([WITH_V4L_WRAPPERS], [test x$enable_dyn_libv4l != xno -a x$enable_shared != xno])
 AM_CONDITIONAL([WITH_QTGL],	    [test x${qt_desktop_opengl} = xyes])
 AM_CONDITIONAL([WITH_GCONV],        [test x$enable_gconv = xyes -a x$enable_shared = xyes -a x$with_gconvdir != x -a -f $with_gconvdir/gconv-modules])
@@ -607,6 +616,9 @@ AM_COND_IF([WITH_QVIDCAP], [USE_QVIDCAP="yes"], [USE_QVIDCAP="no"])
 AM_COND_IF([WITH_V4L_PLUGINS], [USE_V4L_PLUGINS="yes"
 				AC_DEFINE([HAVE_V4L_PLUGINS], [1], [V4L plugin support enabled])],
 				[USE_V4L_PLUGINS="no"])
+AM_COND_IF([WITH_V4L_BUILTIN_PLUGINS], [USE_V4L_BUILTIN_PLUGINS="yes"
+				AC_DEFINE([HAVE_V4L_BUILTIN_PLUGINS], [1], [V4L builtin plugin support enabled])],
+				[USE_V4L_BUILTIN_PLUGINS="no"])
 AM_COND_IF([WITH_V4L_WRAPPERS], [USE_V4L_WRAPPERS="yes"], [USE_V4L_WRAPPERS="no"])
 AM_COND_IF([WITH_GCONV], [USE_GCONV="yes"], [USE_GCONV="no"])
 AM_COND_IF([WITH_V4L2_CTL_LIBV4L], [USE_V4L2_CTL_LIBV4L="yes"], [USE_V4L2_CTL_LIBV4L="no"])
@@ -653,6 +665,7 @@ compile time options summary
 
     dynamic libv4l             : $USE_DYN_LIBV4L
     v4l_plugins                : $USE_V4L_PLUGINS
+    v4l_builtin_plugins        : $USE_V4L_BUILTIN_PLUGINS
     v4l_wrappers               : $USE_V4L_WRAPPERS
     libdvbv5                   : $USE_LIBDVBV5
     dvbv5-daemon               : $USE_DVBV5_REMOTE

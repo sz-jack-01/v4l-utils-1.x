@@ -23,6 +23,9 @@ endif
 libv4l2_la_CPPFLAGS = $(CFLAG_VISIBILITY) $(ENFORCE_LIBV4L_STATIC)
 libv4l2_la_LDFLAGS = $(LIBV4L2_VERSION) -lpthread $(DLOPEN_LIBS) $(ENFORCE_LIBV4L_STATIC)
 libv4l2_la_LIBADD = ../libv4lconvert/libv4lconvert.la
+if WITH_V4L_BUILTIN_PLUGINS
+libv4l2_la_LIBADD += ../libv4l-mplane/libv4l-mplane.la
+endif
 
 v4l2convert_la_SOURCES = v4l2convert.c
 v4l2convert_la_LIBADD = libv4l2.la
